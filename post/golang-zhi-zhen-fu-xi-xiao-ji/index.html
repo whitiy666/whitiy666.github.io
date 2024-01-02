@@ -1,0 +1,224 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>golang-指针复习小记 | Whitiy&#39;s Notes</title>
+
+<link rel="shortcut icon" href="https://whitiy666.github.io/favicon.ico?v=1704179143652">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://whitiy666.github.io/styles/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Whitiy&#39;s Notes
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1704179143652" action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    golang-指针复习小记
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-11-28 ·
+                    </time>
+                    
+                        <a href="https://whitiy666.github.io/tag/golang-tag/" class="post-tags">
+                            # golang
+                        </a>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="简记">简记</h2>
+<p>go的指针是不能运算的<br>
+<code>*int</code> 在类型前面加<code>*</code>表示指针<br>
+<code>&amp;a</code> 在a变量前加<code>&amp;</code>表示取a的地址<br>
+java/python都是引用传递，<strong>go是值传递</strong><br>
+意味着调用参数的时候都需要复制一份值，保证性能使用指针</p>
+<!-- more -->
+<pre><code>func main() {
+	var a int = 2 
+	var pa *int = &amp;a //int指针类型pa = 取a的地址
+	fmt.Println(pa) //输出 0x140000a2008
+	*pa = 3 //让pa指向的地址，实际就是a = 3
+	fmt.Println(a) //输出3
+}
+</code></pre>
+<h2 id="值传递与引用传递">值传递与引用传递</h2>
+<h3 id="值传递">值传递</h3>
+<p>主要是拷贝，但是不会改变原来的值</p>
+<pre><code>//c代码
+void pass_by_val(int a){
+    a++; //会复制参数的值到a，但是实际外面引用的a没有变
+}
+int main(){
+    int a=3;
+    pass_by_val(a);
+    printf(a);  //3，没有对a进行+1
+}
+</code></pre>
+<p>会复制参数的值到a，但是实际外面引用的a没有变。所以调用了 <code>pass_by_val(a);</code> 过后还是输出3</p>
+<h3 id="引用传递">引用传递</h3>
+<pre><code>//c代码
+void pass_by_ref(int&amp; a){
+    a++; 直接在地址中对应a的位置修改
+}
+int main(){
+    int a=3;
+    pass_by_ref(a);
+    printf(a);  //4，对a进行+1
+}
+</code></pre>
+<p>直接对参数a的地址所在位置，实际上在对a进行操作，所以调用了 <code>pass_by_ref(a);</code> 过后输出4（在a=3上面+1）</p>
+<h2 id="例子">例子</h2>
+<h3 id="交换值指针操作">交换值(指针操作)</h3>
+<pre><code>func swap(a, b *int) {
+	*b, *a = *a, *b //直接对ab对指针对应位置交换
+}
+func main() {
+	a, b := 3, 4
+	fmt.Println(a, b)  //3，4
+	swap(&amp;a, &amp;b)
+	fmt.Println(a, b)  //4，3
+}
+</code></pre>
+<p>⚠️ 这里对ab指针进行操作，实际上能够操作到ab。如果只是 a,b=b,a就交换不了，因为这种值传递的形式操作不到给的ab（只是把ab复制进去操作了，外面照样操作不了）</p>
+<h3 id="交换值返回值替换">交换值(返回值替换)</h3>
+<pre><code>func swap(a, b int) (int, int) {
+	return b, a //丢回返回值，用以替换原来的ab
+}
+func main() {
+	a, b := 3, 4
+	fmt.Println(a, b) //3，4
+	a, b = swap(a, b)
+	fmt.Println(a, b)   //4，3
+}
+</code></pre>
+<p>⚠️这里返回了值，将原来的ab复制进去，此时没有改变原来的ab。但是在调用的时候由于出来了交换后的返回值所以在原来的ab拿来接住返回值替换即可</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://whitiy666.github.io/post/macos-xia-dai-li-ruan-jian/" class="post-title gt-a-link">
+                    Macos下代理软件
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live with ❤️</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://whitiy666.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

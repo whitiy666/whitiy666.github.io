@@ -1,0 +1,182 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>Widgets笔记📒-flutter | Whitiy&#39;s Notes</title>
+
+<link rel="shortcut icon" href="https://whitiy666.github.io/favicon.ico?v=1704179143652">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://whitiy666.github.io/styles/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Whitiy&#39;s Notes
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1704179143652" action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    Widgets笔记📒-flutter
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-12-03 ·
+                    </time>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="前言">前言😊</h2>
+<p>因为一些原因，在学习flutter的时候极其混乱，导致很多问题并没有记录下来。因为最开始学习它还是在高三上的空闲时间（大概是），使用的设备也是极其拉胯的旧时代产物（甚至打开Chrome需要5s以上）。配置的环境也极其混乱，很多问题现在的设备完全不会遇到的，在那个时候也通通遇到了。</p>
+<!-- more -->
+<p>我希望我的学习节奏<strong>由自己控制</strong>，因此我在学校技术课程（c++）以外试图同时学习多门语言和相关技术（flutter、uikit-swift、go-gin-gorm等），因为是新手，加之长期以来容易放鸽子的坏习惯，导致感觉上学校的大型社团课（比如go）不如自己折腾 <s>（其实也可以理解为一下子讲太多鼠脑过载）</s> 。所以在目前大一有时间的情况下，我会不定期抽时间同时学习多个技术，虽然不知道到底结果能否如愿，但是我仍然觉得有记录下来的必要（也是因为健忘的原因，不记下来过段时间就忘记了，看自己写的或者收集的东西更容易快速回忆，也能让自己尽可能多理解）。<br>
+接下来我将继续复习和学习flutter，并且带着uikit-swift和go-gin继续折腾。对于flutter的部分，大概会是零散的笔记和实际尝试。</p>
+<h2 id="理念">理念</h2>
+<h3 id="widget">widget</h3>
+<p><strong>一切都是widget。</strong><br>
+所有的东西，视图，活动，功能，应用，布局...都是widget<br>
+flutter也需要结构化组织视图数据，提供给渲染引擎才能显示页面。<br>
+和其他框架一样，flutter也需要视图树，<strong>而 Flutter 将视图树的概念进行了扩展，把视图数据的组织和<br>
+渲染抽象为三部分，即 Widget，Element 和 RenderObject</strong>。</p>
+<p>将widget视为组件，作为实现控件的基本单位。<strong>里面存储的是有关视图渲染的配置信息，包括布局、渲染属性、事件响应信息等</strong>。<br>
+Flutter 将 Widget 设计成不可变的，所以当视图渲染的配置信息发生变化时，Flutter 会选择重建 Widget 树的方式进行数据更新，以数据驱动 UI 构建的方式简单高效。这样做的缺点是，因为涉及到大量对象的销毁和重建，所以会对垃圾回收造成压力。不过，Widget 本身并不涉及实际渲染位图，所以它只是一份轻量级的数据结构，重建的成本很低。</p>
+<h3 id="element">element</h3>
+<p>Element 是 Widget 的一个实例化对象，它承载了视图构建的上下文数据，是连接结构化的配置信息到完成最终渲染的桥梁。<br>
+Flutter 渲染过程，可以分为这么三步：首先，通过 Widget 树生成对应的 Element 树；然后，创建相应的 RenderObject 并关联到 Element.renderObject 属性上；最后，构建成 RenderObject 树，以完成最终的渲染。</p>
+<p>Element 同时持有 Widget 和 RenderObject。而无论是 Widget 还是Element，其实都不负责最后的渲染，只负责发号施令，真正去干活儿的只有RenderObject。</p>
+<p>既然都是发号施令，那增加中间的这层Element 树呢原因？直接由 Widget 命令 RenderObject 去干活儿不好吗？<br>
+可以，但这样做会极大地增加渲染带来的性能损耗。<strong>因为 Widget 具有不可变性</strong>，但 Element 却是可变的。实际上，Element 树这一层将Widget 树的变化做了抽象，可以只将<strong>真正需要修改的部分</strong>同步到真实的 RenderObject 树中，<strong>最大程度降低对真实渲染视图的修改</strong>，提高渲染效率，而<strong>不是销毁整个渲染视图树</strong>重建。</p>
+<p>###RenderObject<br>
+<strong>主要负责实现视图渲染的对象</strong><br>
+布局和绘制在 RenderObject 中完成，Flutter 采用深度优先机制遍历渲染对象树，确定树中各个对象的位置和尺寸，并把它们绘制到不同的图层上。绘制完毕后，合成和渲染的工作则交给 Skia 搞定。<br>
+####RenderObjectWidget<br>
+StatelessWidget 和 StatefulWidget 只是用来组装控件的容器，并不负责组件最后的布局和绘制。在 Flutter 中，<strong>布局和绘制工作实际上是在 Widget 的另一个子类RenderObjectWidget 内完成的。</strong></p>
+<p>RenderObjectWidget 是一个抽象类。我们通过源码可以看到，这个类中同时拥有<strong>创建Element、RenderObject，以及更新 RenderObject 的方法</strong>。但实际上，RenderObjectWidget <strong>本身并不负责</strong>这些对象的创建与更新。对于 Element 的创建，Flutter 会在<strong>遍历 Widget 树时，调用 createElement 去同步Widget 自身配置</strong>，从而生成对应节点的 Element 对象。而对于 RenderObject 的创建与更新，其实是在 RenderObjectElement 类中完成的。</p>
+<p><s><strong>感受理念，暂不深究</strong></s><br>
+这部分大量采用第三方解释。</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://whitiy666.github.io/post/map-golang-fu-xi/" class="post-title gt-a-link">
+                    map-golang复习
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live with ❤️</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://whitiy666.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,254 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>map-golang复习 | Whitiy&#39;s Notes</title>
+
+<link rel="shortcut icon" href="https://whitiy666.github.io/favicon.ico?v=1704179143652">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://whitiy666.github.io/styles/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Whitiy&#39;s Notes
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1704179143652" action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    map-golang复习
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-11-30 ·
+                    </time>
+                    
+                </div>
+                <div class="post-content">
+                    <h2 id="定义">定义</h2>
+<p>先骂一句<br>
+<s><strong>fucking you 🐛🏊</strong></s><br>
+得到消息好像又可以了，那就不fuck了<br>
+大概三种方式定义</p>
+<!-- more -->
+<pre><code>func main() {
+	m1 := map[string]string{
+		&quot;name&quot;: &quot;wh&quot;,
+		&quot;city&quot;: &quot;sgp&quot;,
+	} //map[city:sgp name:wh]
+
+	m2 := make(map[string]int) //map[]
+
+	var m3 map[string]int  //map[]
+
+	fmt.Println(m1, m2, m3)
+}
+</code></pre>
+<h2 id="遍历">遍历</h2>
+<pre><code>func main() {
+	m1 := map[string]string{
+		&quot;name&quot;: &quot;wh&quot;,
+		&quot;city&quot;: &quot;sgp&quot;,
+	} //map[city:sgp name:wh]
+
+	for k, v := range m1 {
+		fmt.Println(k, v)
+
+	}
+	
+}
+</code></pre>
+<p>得到结果</p>
+<pre><code>name wh
+city sgp
+</code></pre>
+<p>⚠️ key在map里面无序，也就是输出还可以下面这样，如果需要排序就需要手动对key排序（slice），然后也可以这样（slice的len）来获取元素个数。</p>
+<pre><code>city sgp
+name wh
+</code></pre>
+<p>如果不需要的参数 <code>k,v</code> 可以<code>_</code>替代</p>
+<h2 id="获取map的值">获取map的值</h2>
+<pre><code>func main() {
+	m1 := map[string]string{
+		&quot;name&quot;: &quot;wh&quot;,
+		&quot;city&quot;: &quot;sgp&quot;,
+	} //map[city:sgp name:wh]
+	fmt.Println(m1[&quot;name&quot;])  //wh
+}
+</code></pre>
+<p>就 <code>m1[&quot;name&quot;]</code> 这样<br>
+如果打错了 <code>m1[&quot;nama&quot;]</code> 会输出 <code> </code> 空的</p>
+<h2 id="判断值是否存在">判断值是否存在</h2>
+<pre><code>func main() {
+	m1 := map[string]string{
+		&quot;name&quot;: &quot;wh&quot;,
+		&quot;city&quot;: &quot;sgp&quot;,
+	} //map[city:sgp name:wh]
+	
+	_, nameok := m1[&quot;name&quot;]
+	fmt.Println(nameok) //true
+
+	_, namaok := m1[&quot;nama&quot;]
+	fmt.Println(namaok)  //false
+
+}
+</code></pre>
+<p>类似 <code>_, nameok := m1[&quot;name&quot;]</code> 其中<code>_</code>的位置表示取得的值（这里_表示我不要），<code>nameok</code>表示<code>name</code>段是否存在</p>
+<p><strong>实际可以这么用嘛</strong></p>
+<pre><code>m1 := map[string]string{
+		&quot;name&quot;: &quot;wh&quot;,
+		&quot;city&quot;: &quot;sgp&quot;,
+	} //map[city:sgp name:wh]
+
+	if name,ok := m1[&quot;name&quot;];ok{
+		fmt.Println(name)
+	}else {
+		fmt.Println(&quot;空值&quot;)
+	}
+</code></pre>
+<p>有值就打印，没有就打印“空值”</p>
+<h2 id="删除值">删除值</h2>
+<pre><code>func main() {
+	m1 := map[string]string{
+		&quot;name&quot;: &quot;wh&quot;,
+		&quot;city&quot;: &quot;sgp&quot;,
+	} //map[city:sgp name:wh]
+
+	fmt.Println(m1) //map[city:sgp name:wh]
+	delete(m1, &quot;name&quot;)
+	fmt.Println(m1) //map[city:sgp]
+}
+</code></pre>
+<p>就是 <code>delete(m1, &quot;name&quot;)</code><br>
+用 <code>delete</code> 第一个参数是 map名 第二个是 字段名</p>
+<h2 id="map的key">map的key</h2>
+<p>map使用哈希表，可以比较相等<br>
+除了<code>slice</code>,<code>map</code>,<code>function</code>的内建类型都可以作为key(通常也不会这样乱搞)<br>
+struct类型<strong>不包含上述字段</strong>也可以作为key</p>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://whitiy666.github.io/post/slice-qie-pian-golang-fu-xi-1/" class="post-title gt-a-link">
+                    slice切片-golang复习
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live with ❤️</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://whitiy666.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

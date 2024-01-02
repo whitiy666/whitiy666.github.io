@@ -1,0 +1,329 @@
+<html>
+<head>
+    <meta charset="utf-8"/>
+<meta name="description" content=""/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+<title>slice切片-golang复习 | Whitiy&#39;s Notes</title>
+
+<link rel="shortcut icon" href="https://whitiy666.github.io/favicon.ico?v=1704179143652">
+
+<link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://whitiy666.github.io/styles/main.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets/highlight.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dockerfile.min.js"></script>
+<script src="https://cdn.bootcss.com/highlight.js/9.15.10/languages/dart.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/moment@2.27.0/moment.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js"></script>
+<!-- DEMO JS -->
+<!--<script src="media/scripts/index.js"></script>-->
+
+
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.css">
+</head>
+<body>
+<div class="main gt-bg-theme-color-first">
+    <nav class="navbar navbar-expand-lg">
+    <div class="navbar-brand">
+        <img class="user-avatar" src="/images/avatar.png" alt="头像">
+        <div class="site-name gt-c-content-color-first">
+            Whitiy&#39;s Notes
+        </div>
+    </div>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fas fa-bars gt-c-content-color-first" style="font-size: 18px"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="navbar-nav mr-auto" style="text-align: center">
+            
+                <div class="nav-item">
+                    
+                        <a href="/" class="menu gt-a-link">
+                            首页
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/archives" class="menu gt-a-link">
+                            归档
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/tags" class="menu gt-a-link">
+                            标签
+                        </a>
+                    
+                </div>
+            
+                <div class="nav-item">
+                    
+                        <a href="/post/about" class="menu gt-a-link">
+                            关于
+                        </a>
+                    
+                </div>
+            
+        </div>
+        <div style="text-align: center">
+            <form id="gridea-search-form" style="position: relative" data-update="1704179143652" action="/search/index.html">
+                <input class="search-input" autocomplete="off" spellcheck="false" name="q" placeholder="搜索文章" />
+                <i class="fas fa-search gt-c-content-color-first" style="position: absolute; top: 9px; left: 10px;"></i>
+            </form>
+        </div>
+    </div>
+</nav>
+
+    <div class="post-container">
+        <div class="post-detail gt-bg-theme-color-second">
+            <article class="gt-post-content">
+                <h2 class="post-title">
+                    slice切片-golang复习
+                </h2>
+                <div class="post-info">
+                    <time class="post-time gt-c-content-color-first">
+                        · 2022-11-29 ·
+                    </time>
+                    
+                </div>
+                <div class="post-content">
+                    <p>复习一下切片，slice</p>
+<h2 id="例子">例子</h2>
+<h4 id="demo1">demo1</h4>
+<pre><code class="language-golang">func main() {
+	arr := [...]int{0, 1, 2, 3, 4, 5, 6, 7} //数组
+	s := arr[2:6]  //从数组取2—6
+	fmt.Println(s) //输出 [2 3 4 5]
+    fmt.Println(arr[:6]) // [0 1 2 3 4 5] 省略头直接从0开始
+	fmt.Println(arr[2:])   // [2 3 4 5 6 7] 省略尾巴直接到末尾
+	fmt.Println(arr[:])  // [0 1 2 3 4 5 6 7]  头尾都省了全部都有
+}
+</code></pre>
+<!-- more -->
+<h3 id="demo2">demo2</h3>
+<p>slice不是一个值类型，是数据结构视图<br>
+<code>arr[:6]</code> 是对于 <code>arr</code>的一个视图<br>
+<code>[]int</code> 表示一个slice 没有...或者长度，<strong>与数组区别</strong></p>
+<pre><code class="language-golang">func updateSlice(s []int) {
+	s[0] = 100
+}
+
+func main() {
+	arr := [...]int{0, 1, 2, 3, 4, 5, 6, 7}
+	s1 := arr[2:] //[2 3 4 5 6 7]
+
+	fmt.Println(s1) //	修改前  [2 3 4 5 6 7]
+	updateSlice(s1) //执行修改
+	fmt.Println(s1) //[100 3 4 5 6 7]  //切片0的位置改为了100
+	fmt.Println(arr) //[0 1 100 3 4 5 6 7]  原来数组的相应位置2 也被改成了100
+}
+</code></pre>
+<p>因为s1作为arr的一个切片，算是一个视图，所以s1改动时候影响到arr数组的相应位置也发生改动<br>
+貌似用来修改数组是个好方案，省得用指针改<br>
+总结：slice本身没有数据，slice是对底层array的一个视图</p>
+<h3 id="demo3">demo3</h3>
+<p>reslice 在slice上面建立slice</p>
+<pre><code class="language-golang">func main() {
+   arr := [...]int{0, 1, 2, 3, 4, 5, 6, 7}
+   s2 := arr[:] //取得arr全部
+   fmt.Println(s2) //[0 1 2 3 4 5 6 7]
+
+   s2 = s2[:5] //在s2上面取开始到5
+   fmt.Println(s2) //[0 1 2 3 4]
+
+   s2 = s2[2:] //在去过开始到5基础上的s2 上面再取2到结束
+   fmt.Println(s2) //[2 3 4]
+
+}
+</code></pre>
+<p>可以在一个底层array上面建立多个slice<br>
+可以在slice基础上再建立slice，但是底层还是同一个array</p>
+<h3 id="demo3-2">demo3</h3>
+<p>extending slice 拓展slice</p>
+<pre><code class="language-golang">func main() {
+	arr := [...]int{0, 1, 2, 3, 4, 5, 6, 7}
+	s1 := arr[2:6] 
+	fmt.Println(s1) //[2 3 4 5]
+
+	s2 := s1[3:5]  //在s1基础上取 3,4 但是实际上最后就只有第3位指向的5，而没有4指向的（直接打印s1[4]都会报错
+	fmt.Println(s2) //[5 6]  //结果取到了5 6，⚠️但是6压根不在s1里面
+
+}
+</code></pre>
+<p>s2在s1上面取，然后取到了并不在s1中的数据，超出的数据实际上是底层arr的数据——切片的推展<br>
+slice下面有 <code>ptr</code> <code>len</code> <code>cap</code>只要不超过 <code>cap就可以拓展 cap是底层的array slice可以向后扩展，不可以向前扩展 </code>s[i]<code> 不可以超过</code>len(s)<code>,向后扩展不可以超过底层数组 </code>cap(s)`</p>
+<h3 id="demo4">demo4</h3>
+<p>len和cap</p>
+<pre><code class="language-golang">func main() {
+	arr := [...]int{0, 1, 2, 3, 4, 5, 6, 7}
+	s1 := arr[2:6]
+	fmt.Printf(&quot;%v,%d,%d&quot;, s1, len(s1), cap(s1)) //[2 3 4 5],4,6 len就是4，cap就是6（还可以往后拓展到 [6 7]
+}
+</code></pre>
+<p>len就是当前视图slice切片容量，cap就是向后可以拓展到底层array数组的容量</p>
+<h3 id="demo5">demo5</h3>
+<p>向slice append操作</p>
+<pre><code class="language-golang">func main() {
+	arr := [...]int{0, 1, 2, 3, 4, 5, 6, 7}
+	s2 := arr[5:7]                       //[5 6]
+	s3 := append(s2, 10)                 //[5 6 10]
+	s4 := append(s3, 11)                 //[5 6 10 11]
+	s5 := append(s4, 12)                 // [5 6 10 11 12]
+	fmt.Println(&quot;s3,s4,s5=&quot;, s3, s4, s5) //s3,s4,s5= [5 6 10] [5 6 10 11] [5 6 10 11 12]
+	fmt.Println(&quot;arr=&quot;, arr) //arr= [0 1 2 3 4 5 6 10] //即使上面加到了12，但是最多对原来的底层arr影响也在10，没有超过容量
+}
+</code></pre>
+<p>即使上面slice数据加到了12，但是最多对原来的底层arr影响也在10，没有超过arr容量。而11，12这些实际上进入到了一个新开的array里面（容量比原来的要大）——&gt; s4,s5的slice已经不再是arr为底层array，由系统分配了一个新的array作为底层<br>
+<strong>添加元素时超过cap，系统会重新分配更大的底层数组，并且复制原来的值</strong><br>
+原来的arr数组如果有用会被留下，没有用会被垃圾回收机制回收掉<br>
+<strong>由于值传递的关系，必须接收append的返回值</strong><br>
+也就是类似 <code>s = append(s,val)</code></p>
+<h3 id="demo6">demo6</h3>
+<h4 id="demo6-1">demo6-1</h4>
+<p>创建slice 空的nil的 slice</p>
+<pre><code class="language-golang">func printSlice(s []int) {
+	fmt.Printf(&quot;len=%d,cap=%d\n&quot;, len(s), cap(s))
+}
+func main() {
+	var s []int
+
+	for i := 0; i &lt; 5; i++ {
+		printSlice(s)
+		s = append(s, 2*i+1)
+	}
+	fmt.Println(s)
+}
+</code></pre>
+<p>输出</p>
+<pre><code>len=0,cap=0
+len=1,cap=1
+len=2,cap=2
+len=3,cap=4
+len=4,cap=4
+[1 3 5 7 9]
+</code></pre>
+<h4 id="demo6-2">demo6-2</h4>
+<p><code>:= []int</code>创建</p>
+<pre><code class="language-golang">func main() {
+	s1 := []int{2, 4, 6, 8}
+	printSlice_c(s1) //len=4,cap=4
+}
+</code></pre>
+<h4 id="demo6-3">demo6-3</h4>
+<p><code>make</code> 知道slice容量，但是不知道里面的值</p>
+<pre><code class="language-golang">func main() {
+	s1 := make([]int, 16)
+	s2 := make([]int, 10, 32)
+	printSlice_d(s1) //len=16,cap=16
+	printSlice_d(s2) //len=10,cap=32
+}
+</code></pre>
+<h3 id="demo7">demo7</h3>
+<p>复制copy slice</p>
+<pre><code class="language-golang">func main() {
+	s1 := []int{1, 2, 3, 4} //[1 2 3 4]
+	s2 := make([]int, 8)    //[0 0 0 0 0 0 0 0]
+	copy(s2, s1) //把s1的值复制到s2
+	fmt.Println(s2) //[1 2 3 4 0 0 0 0]
+
+}
+</code></pre>
+<p>copy(复制到的位置，用于复制的数据)</p>
+<p>###demo8</p>
+<h4 id="删除中间slice的值">删除中间slice的值</h4>
+<pre><code class="language-golang">func main() {
+	s1 := []int{1, 2, 3, 4, 5, 0, 0, 0}
+	fmt.Println(s1) //[1 2 3 4 5 0 0 0]
+
+	s1 = append(s1[:3], s1[4:]...) //删除了4
+	fmt.Println(s1) //[1 2 3 5 0 0 0]
+}
+</code></pre>
+<p>由于没有给删除值的函数，所以用<code>append</code>来处理<br>
+<code>s1[4:]...</code>中的<code>...</code>表示把4以后的值全部往前面挪</p>
+<h4 id="删除首尾slice的值">删除首尾slice的值</h4>
+<pre><code class="language-golang">func main() {
+   s1 := []int{1, 2, 3, 4, 5, 0, 0, 0}
+   fmt.Println(s1) //[1 2 3 4 5 0 0 0]
+
+   //删除头
+   front := s1[0] //1
+   s1 = s1[1:]
+   
+   //删除尾
+   tail := s1[len(s1)-1] //0
+   s1 = s1[:len(s1)-1]
+
+   fmt.Println(front, tail) //1 0
+   fmt.Println(s1)     //[2 3 4 5 0 0]
+}
+</code></pre>
+<p>删除头就把 <code>[1:]</code> 的值赋给原来的slice<br>
+删除尾就把 <code> [:len(s)-1]</code> 的值赋给原来的slice<br>
+删除会改变 <code>len</code>，不会改变 <code>cap</code></p>
+<h3 id="完结撒花">完结撒花🎉</h3>
+
+                </div>
+            </article>
+        </div>
+
+        
+            <div class="next-post">
+                <div class="next gt-c-content-color-first">下一篇</div>
+                <a href="https://whitiy666.github.io/post/golang-zhi-zhen-fu-xi-xiao-ji/" class="post-title gt-a-link">
+                    golang-指针复习小记
+                </a>
+            </div>
+        
+
+        
+
+        
+
+        
+
+        <div class="site-footer gt-c-content-color-first">
+    <div class="slogan gt-c-content-color-first">Live with ❤️</div>
+    <div class="social-container">
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+            
+        
+    </div>
+    <div class="footer-info">
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a>
+    </div>
+    <div>
+        Theme by <a href="https://imhanjie.com/" target="_blank">imhanjie</a>, Powered by <a
+                href="https://github.com/getgridea/gridea" target="_blank">Gridea | <a href="https://whitiy666.github.io/atom.xml" target="_blank">RSS</a></a>
+    </div>
+</div>
+
+<script>
+  hljs.initHighlightingOnLoad()
+</script>
+
+    </div>
+</div>
+</body>
+</html>

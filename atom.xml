@@ -1,0 +1,703 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <id>https://whitiy666.github.io</id>
+    <title>Whitiy&apos;s Notes</title>
+    <updated>2024-01-02T07:05:47.008Z</updated>
+    <generator>https://github.com/jpmonette/feed</generator>
+    <link rel="alternate" href="https://whitiy666.github.io"/>
+    <link rel="self" href="https://whitiy666.github.io/atom.xml"/>
+    <subtitle>Live with ❤️</subtitle>
+    <logo>https://whitiy666.github.io/images/avatar.png</logo>
+    <icon>https://whitiy666.github.io/favicon.ico</icon>
+    <rights>All rights reserved 2024, Whitiy&apos;s Notes</rights>
+    <entry>
+        <title type="html"><![CDATA[2023 END :: 2024 🌟]]></title>
+        <id>https://whitiy666.github.io/post/2023-end-2024/</id>
+        <link href="https://whitiy666.github.io/post/2023-end-2024/">
+        </link>
+        <updated>2024-01-01T14:02:02.000Z</updated>
+        <content type="html"><![CDATA[<h3 id="2023">2023</h3>
+<p>2023年是一个不太舒服的一年，大学的地皮踩了一段时间了，能感受到理想与现实的 <strong>落差</strong> 。我并不喜欢这个大学，因此在公共场合我不太喜欢谈及这个点。至于专业，本应该是很喜欢的专业（软件工程），到现在我更多的是嫌弃与厌恶。并非对这个专业的厌恶，更多可能是针对这个学校的这个专业的厌恶，完全不明所以的培养方案，毫无价值的课程、活动。宝贵的时间在应付学校的事情中浪费掉。<br>
+技术方面，继续深入学习Flutter和Dart语言。并且新学了Golang，并试着使用Golang构建了几个后端项目，其中一个已经在投入使用。我一向不喜欢谈论技术细节，因此在此略过。<br>
+我大概不是一个真正意义上的 <strong>技术人</strong> 。我学习各种编程的东西，主要是希望寻找一个好的工作，同时希望将我的 <strong>想法</strong> 变成 <strong>现实</strong> 。与此同时将其作为利益产出的手段之一。从事自己喜欢的工作和事业是最美好的事情。某些方面来看这也是我一直不想考研的原因，我厌恶学习不想学习的东西，无论是八股文还是文科一样的编程教学、政治、数理等东西。我认为我更像一个致力于在商业方面有所发展的技术学习者。在为了实现某些东西的目的驱使下去学习新的技术和技能。<br>
+其他值得一提的是我大概放弃了一个价值不大的项目，目前它几乎摆烂了（用户5k左右，但活跃度和长远看发展不行）。另外几个项目取代了它的地位，新的项目在创建后一个月内都超过了1k用户的注册，并带来了一些可以发展的利益。其中的一个项目正是运用了我现学现卖的后端（尬笑.jpeg)。</p>
+<h3 id="2024">2024</h3>
+<p>希望能脱单。<br>
+还有新技术的学习和Golang相关后端的技术学习。<br>
+算法。<br>
+希望能继续完善目前的项目，并且新增新的项目。希望早日进入到外块养活自己。<br>
+最重要的是：希望能让自己的精神状态好一些，平淡的看待体制的事情和一些无法闪避的坏事。 <strong>爱自己</strong> 是 <strong>最重要</strong> 的。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[gin处理url变量]]></title>
+        <id>https://whitiy666.github.io/post/gin-chu-li-url-bian-liang/</id>
+        <link href="https://whitiy666.github.io/post/gin-chu-li-url-bian-liang/">
+        </link>
+        <updated>2022-12-24T10:24:37.000Z</updated>
+        <content type="html"><![CDATA[<h2 id="提出">提出</h2>
+<pre><code>	goodsGroup := router.Group(&quot;/goods&quot;)
+	{
+		goodsGroup.GET(&quot;/list&quot;, goodlist)
+		goodsGroup.GET(&quot;/1&quot;, goodadetail)
+		goodsGroup.POST(&quot;add&quot;, creatgoods)
+	}
+</code></pre>
+<p>其中 <code>goodsGroup.GET(&quot;/1&quot;, goodadetail)</code>这样获取id为1的商品并不科学。</p>
+<pre><code>	goodsGroup := router.Group(&quot;/goods&quot;)
+	{
+		goodsGroup.GET(&quot;/list&quot;, goodlist)
+		goodsGroup.GET(&quot;/:id/:action&quot;, goodadetail) //改成这样的变量
+		goodsGroup.POST(&quot;add&quot;, creatgoods)
+	}
+</code></pre>
+<h2 id="解决">解决</h2>
+<p>这样可以把url的id放在变量里面 <code>:id</code>的位置，用于函数处理。在这里函数是<code>goodadetail</code>。<br>
+下面改函数。</p>
+<pre><code>func goodadetail(context *gin.Context) {
+	id := context.Param(&quot;id&quot;)
+	action := context.Param(&quot;action&quot;)
+	context.JSON(http.StatusOK, gin.H{
+		&quot;id&quot;: id, 
+		&quot;action&quot;:action,
+	})
+
+}
+</code></pre>
+<p><code>id := context.Param(&quot;id&quot;)</code>这是取出url中id的位置放到新创建的<code>id</code>变量里面。<br>
+⚠️这样直接开始会有问题</p>
+<pre><code>goodsGroup.GET(&quot;/list&quot;, goodlist)
+goodsGroup.GET(&quot;/:id&quot;, goodadetail)
+</code></pre>
+<p>显然list的匹配模式和id匹配模式冲突。<br>
+改成</p>
+<pre><code>goodsGroup.GET(&quot;&quot;, goodlist) //直接get
+goodsGroup.GET(&quot;/:id&quot;, goodadetail) 
+goodsGroup.POST(&quot;&quot;, creatgoods) //直接post
+</code></pre>
+<p>这样比较符合规范。</p>
+<p>另外有一种 <code>*</code>的匹配模式，慎用<br>
+<code>goodsGroup.GET(&quot;/:id/*action&quot;, goodadetail)</code><br>
+如果访问/goods/1/delete/other<br>
+在<code>*</code>模式下会获取到 <code>action:&quot;/delete/other&quot;</code>就是把后面的东西全部放进去<br>
+<code>:</code>模式下，如果访问<code>/goods/1/delete/another</code>等只会得到<code>404&quot;</code>，要完成匹配必须访问类似 <code>/goods/1/delete/other</code>。。可能说不清楚。简而言之<code>:</code>下匹配更加强制格式,<code>*</code>则更像对路径的一把抓。<br>
+<code>*</code>模式一般用于获取文件路径等情况。动态url，比如id之类还是用<code>:</code>。</p>
+<h2 id="约束url">约束url</h2>
+<pre><code>goodsGroup.GET(&quot;/list&quot;, goodlist)
+goodsGroup.GET(&quot;/:id/:action&quot;, goodadetail)
+</code></pre>
+<p>会把list当id，需要约束，比如非数字的404处理。<br>
+下面是写的例子</p>
+<pre><code>package main
+
+import (
+	&quot;github.com/gin-gonic/gin&quot;
+	&quot;net/http&quot;
+)
+
+type Person struct {
+	ID   string `uri:&quot;id&quot; binding:&quot;required,uuid&quot;` //ID必须string类型，required表示必须，格式是uuid类型
+	Name string `uri:&quot;name&quot; binding:&quot;required&quot;`
+}
+
+func main() {
+
+	rooter := gin.Default()
+	rooter.GET(&quot;/:name/:id&quot;, func(context *gin.Context) {
+		var person Person
+
+		//err取值为匹配后的错误 &amp;person传入函数的地址。 err != nil就是有错
+		if err := context.ShouldBindUri(&amp;person); err != nil {
+			context.Status(404)
+			return //直接return，否则出错了还要执行下面的逻辑
+		}
+
+		context.JSON(http.StatusOK,gin.H{
+			&quot;name&quot;:person.Name,
+			&quot;id&quot;:person.ID,
+		})
+
+	})
+   rooter.Run(&quot;:8083&quot;)
+}
+</code></pre>
+<p>主要是定义 Person结构体，用于匹配url里面的传值类型。<br>
+然后分别对传值无误和有误的数据进行处理<br>
+其中表单验证之后在写。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[gin-day2-路由分组]]></title>
+        <id>https://whitiy666.github.io/post/gin-day2-lu-you-fen-zu/</id>
+        <link href="https://whitiy666.github.io/post/gin-day2-lu-you-fen-zu/">
+        </link>
+        <updated>2022-12-15T07:11:51.000Z</updated>
+        <summary type="html"><![CDATA[<p><s>今天时间多还早，多折腾会</s></p>
+]]></summary>
+        <content type="html"><![CDATA[<p><s>今天时间多还早，多折腾会</s></p>
+<!-- more -->
+<h2 id="开始">开始</h2>
+<p>URL过多需要面临分组问题，这是个高频使用内容</p>
+<pre><code>router.GET(&quot;/goods/list&quot;,goodlist)
+router.GET(&quot;/goods/add&quot;,creatgoods)
+router.GET(&quot;/goods/1&quot;,goodadetail)
+</code></pre>
+<p>这样都有<code>/goods</code> 直接上面那样搞不合适</p>
+<h2 id="创建路由组">创建路由组</h2>
+<p><code>goodsGroup := router.Group(&quot;/goods&quot;)</code>这样创建了一个<code>/goods</code>开头的路由组<br>
+后面绑定就可以<br>
+<code>goodsGroup.GET(&quot;/list&quot;,goodlist)</code>就规整多了<br>
+<strong>例子</strong></p>
+<pre><code>	goodsGroup := router.Group(&quot;/goods&quot;)
+	{
+		goodsGroup.GET(&quot;/list&quot;, goodlist)
+		goodsGroup.GET(&quot;/1&quot;, goodadetail)
+		goodsGroup.POST(&quot;add&quot;, creatgoods)
+	}
+</code></pre>
+<p>开头创建个组，然后直接一个大括号，把组内的路由绑定进去,看上去很规整。<br>
+路由组很多会用到<code>v1</code>这样的，来区别接口版本号</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[gin-day2-各种请求测试]]></title>
+        <id>https://whitiy666.github.io/post/gin-day2-ge-chong-qing-qiu-ce-shi/</id>
+        <link href="https://whitiy666.github.io/post/gin-day2-ge-chong-qing-qiu-ce-shi/">
+        </link>
+        <updated>2022-12-15T06:43:21.000Z</updated>
+        <summary type="html"><![CDATA[<p>post/get等请求方式...</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>post/get等请求方式...</p>
+<!-- more -->
+<h2 id="创建-new和default">创建 | new和default</h2>
+<p><code>router := gin.Default()</code>会在创建时候开启默认中间件<code>logger</code>和<code>recovery</code><br>
+<code>logger</code>嘛就是那个在启动后把各种请求信息打印在控制台的那玩意儿<br>
+<code>recovery</code>就是故障恢复用的<br>
+如果是<code>router := gin.New()</code> 这样就没有默认开启中间件，然后比如请求时候就没有日志了；然后比如之前那个<code>pong</code>函数里面加一个<code>panic</code>故障就会直接崩（服务器返回空）。正常情况下函数异常返回个500状态码就行了，但是这里因为没有<code>recovery</code>就直接没法返回状态码了<br>
+当然如果是<code>router := gin.Default()</code>就会返回<code>HTTP ERROR 500</code>这样，服务器响应了500状态码。</p>
+<h2 id="配置请求和url">配置请求和URL</h2>
+<p><code>router.GET(&quot;/someGet&quot;,ping)</code>这样就行了,ping是处理函数<br>
+当然以此类推POST/DELETE/...<br>
+同一个URL可以配置不同的请求方法</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[gin开肝 day1开始]]></title>
+        <id>https://whitiy666.github.io/post/gin-kai-gan/</id>
+        <link href="https://whitiy666.github.io/post/gin-kai-gan/">
+        </link>
+        <updated>2022-12-14T14:26:42.000Z</updated>
+        <summary type="html"><![CDATA[<p>这下开始折腾gin咯。gin是go上的一个轻量高效的web框架，有必要学习～</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>这下开始折腾gin咯。gin是go上的一个轻量高效的web框架，有必要学习～</p>
+<!-- more -->
+<h2 id="开始">开始</h2>
+<p>环境是很强的梯子环境，然后这样就可以省的配置什么<s>中国特色环境</s>了。<br>
+上来先引入依赖吧</p>
+<pre><code>import (
+	&quot;net/http&quot;
+
+	&quot;github.com/gin-gonic/gin&quot;
+)
+</code></pre>
+<p>官方的例子</p>
+<pre><code>func main() {
+	r := gin.Default()  //实例化一个gin对象server
+
+// /ping是一个url，然后 func(c *gin.Context)是它的处理函数
+//函数的参数必须是gin的context，指针类型
+	r.GET(&quot;/ping&quot;, func(c *gin.Context) {  
+        //http.StatusOK用的net/http库，一般不用200之类写死
+        //gin.H 其实是map的别名    type H map[string]any  key是string，value就是任意类型
+
+		c.JSON(http.StatusOK, gin.H{
+			&quot;message&quot;: &quot;pong&quot;,
+		})
+	})
+	r.Run() // listen and serve on 0.0.0.0:8080 (for windows &quot;localhost:8080&quot;)
+}
+</code></pre>
+<h3 id="进行修改主要是把函数提出来">进行修改，主要是把函数提出来</h3>
+<pre><code>func pong(c *gin.Context) {
+	c.JSON(http.StatusOK, gin.H{
+		&quot;message&quot;: &quot;pong&quot;,
+	})
+
+}
+
+func main() {
+	r := gin.Default()
+	r.GET(&quot;/ping&quot;, pong)
+	r.Run(&quot;:8083&quot;) 
+    // 默认listen and serve on 0.0.0.0:8080 (for windows &quot;localhost:8080&quot;)，但是可以&quot;:port&quot;改成自定义端口
+}
+</code></pre>
+<h3 id="进行对函数pong修改替换掉ginh">进行对函数pong修改，替换掉gin.H</h3>
+<pre><code>func pong1(c *gin.Context) {
+	c.JSON(http.StatusOK,map[string]string{
+		&quot;message&quot;: &quot;pong&quot;,
+	})
+}
+</code></pre>
+<p>就是<code>gin.H</code>可以换成 <code>map[string]string</code> 反正都是map。不过这个太常用，肯定就直接<code>gin.H</code>多方便，为简洁而生嘛</p>
+<h2 id="跑起来">跑起来</h2>
+<p>在浏览器 <code>http://127.0.0.1:8083/ping</code>下出现<br>
+<code>{&quot;message&quot;:&quot;pong&quot;}</code></p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Widgets笔记📒-flutter]]></title>
+        <id>https://whitiy666.github.io/post/widgets-bi-ji-flutter/</id>
+        <link href="https://whitiy666.github.io/post/widgets-bi-ji-flutter/">
+        </link>
+        <updated>2022-12-03T10:24:19.000Z</updated>
+        <summary type="html"><![CDATA[<h2 id="前言">前言😊</h2>
+<p>因为一些原因，在学习flutter的时候极其混乱，导致很多问题并没有记录下来。因为最开始学习它还是在高三上的空闲时间（大概是），使用的设备也是极其拉胯的旧时代产物（甚至打开Chrome需要5s以上）。配置的环境也极其混乱，很多问题现在的设备完全不会遇到的，在那个时候也通通遇到了。</p>
+]]></summary>
+        <content type="html"><![CDATA[<h2 id="前言">前言😊</h2>
+<p>因为一些原因，在学习flutter的时候极其混乱，导致很多问题并没有记录下来。因为最开始学习它还是在高三上的空闲时间（大概是），使用的设备也是极其拉胯的旧时代产物（甚至打开Chrome需要5s以上）。配置的环境也极其混乱，很多问题现在的设备完全不会遇到的，在那个时候也通通遇到了。</p>
+<!-- more -->
+<p>我希望我的学习节奏<strong>由自己控制</strong>，因此我在学校技术课程（c++）以外试图同时学习多门语言和相关技术（flutter、uikit-swift、go-gin-gorm等），因为是新手，加之长期以来容易放鸽子的坏习惯，导致感觉上学校的大型社团课（比如go）不如自己折腾 <s>（其实也可以理解为一下子讲太多鼠脑过载）</s> 。所以在目前大一有时间的情况下，我会不定期抽时间同时学习多个技术，虽然不知道到底结果能否如愿，但是我仍然觉得有记录下来的必要（也是因为健忘的原因，不记下来过段时间就忘记了，看自己写的或者收集的东西更容易快速回忆，也能让自己尽可能多理解）。<br>
+接下来我将继续复习和学习flutter，并且带着uikit-swift和go-gin继续折腾。对于flutter的部分，大概会是零散的笔记和实际尝试。</p>
+<h2 id="理念">理念</h2>
+<h3 id="widget">widget</h3>
+<p><strong>一切都是widget。</strong><br>
+所有的东西，视图，活动，功能，应用，布局...都是widget<br>
+flutter也需要结构化组织视图数据，提供给渲染引擎才能显示页面。<br>
+和其他框架一样，flutter也需要视图树，<strong>而 Flutter 将视图树的概念进行了扩展，把视图数据的组织和<br>
+渲染抽象为三部分，即 Widget，Element 和 RenderObject</strong>。</p>
+<p>将widget视为组件，作为实现控件的基本单位。<strong>里面存储的是有关视图渲染的配置信息，包括布局、渲染属性、事件响应信息等</strong>。<br>
+Flutter 将 Widget 设计成不可变的，所以当视图渲染的配置信息发生变化时，Flutter 会选择重建 Widget 树的方式进行数据更新，以数据驱动 UI 构建的方式简单高效。这样做的缺点是，因为涉及到大量对象的销毁和重建，所以会对垃圾回收造成压力。不过，Widget 本身并不涉及实际渲染位图，所以它只是一份轻量级的数据结构，重建的成本很低。</p>
+<h3 id="element">element</h3>
+<p>Element 是 Widget 的一个实例化对象，它承载了视图构建的上下文数据，是连接结构化的配置信息到完成最终渲染的桥梁。<br>
+Flutter 渲染过程，可以分为这么三步：首先，通过 Widget 树生成对应的 Element 树；然后，创建相应的 RenderObject 并关联到 Element.renderObject 属性上；最后，构建成 RenderObject 树，以完成最终的渲染。</p>
+<p>Element 同时持有 Widget 和 RenderObject。而无论是 Widget 还是Element，其实都不负责最后的渲染，只负责发号施令，真正去干活儿的只有RenderObject。</p>
+<p>既然都是发号施令，那增加中间的这层Element 树呢原因？直接由 Widget 命令 RenderObject 去干活儿不好吗？<br>
+可以，但这样做会极大地增加渲染带来的性能损耗。<strong>因为 Widget 具有不可变性</strong>，但 Element 却是可变的。实际上，Element 树这一层将Widget 树的变化做了抽象，可以只将<strong>真正需要修改的部分</strong>同步到真实的 RenderObject 树中，<strong>最大程度降低对真实渲染视图的修改</strong>，提高渲染效率，而<strong>不是销毁整个渲染视图树</strong>重建。</p>
+<p>###RenderObject<br>
+<strong>主要负责实现视图渲染的对象</strong><br>
+布局和绘制在 RenderObject 中完成，Flutter 采用深度优先机制遍历渲染对象树，确定树中各个对象的位置和尺寸，并把它们绘制到不同的图层上。绘制完毕后，合成和渲染的工作则交给 Skia 搞定。<br>
+####RenderObjectWidget<br>
+StatelessWidget 和 StatefulWidget 只是用来组装控件的容器，并不负责组件最后的布局和绘制。在 Flutter 中，<strong>布局和绘制工作实际上是在 Widget 的另一个子类RenderObjectWidget 内完成的。</strong></p>
+<p>RenderObjectWidget 是一个抽象类。我们通过源码可以看到，这个类中同时拥有<strong>创建Element、RenderObject，以及更新 RenderObject 的方法</strong>。但实际上，RenderObjectWidget <strong>本身并不负责</strong>这些对象的创建与更新。对于 Element 的创建，Flutter 会在<strong>遍历 Widget 树时，调用 createElement 去同步Widget 自身配置</strong>，从而生成对应节点的 Element 对象。而对于 RenderObject 的创建与更新，其实是在 RenderObjectElement 类中完成的。</p>
+<p><s><strong>感受理念，暂不深究</strong></s><br>
+这部分大量采用第三方解释。</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[map-golang复习]]></title>
+        <id>https://whitiy666.github.io/post/map-golang-fu-xi/</id>
+        <link href="https://whitiy666.github.io/post/map-golang-fu-xi/">
+        </link>
+        <updated>2022-11-30T14:33:27.000Z</updated>
+        <summary type="html"><![CDATA[<h2 id="定义">定义</h2>
+<p>先骂一句<br>
+<s><strong>fucking you 🐛🏊</strong></s><br>
+得到消息好像又可以了，那就不fuck了<br>
+大概三种方式定义</p>
+]]></summary>
+        <content type="html"><![CDATA[<h2 id="定义">定义</h2>
+<p>先骂一句<br>
+<s><strong>fucking you 🐛🏊</strong></s><br>
+得到消息好像又可以了，那就不fuck了<br>
+大概三种方式定义</p>
+<!-- more -->
+<pre><code>func main() {
+	m1 := map[string]string{
+		&quot;name&quot;: &quot;wh&quot;,
+		&quot;city&quot;: &quot;sgp&quot;,
+	} //map[city:sgp name:wh]
+
+	m2 := make(map[string]int) //map[]
+
+	var m3 map[string]int  //map[]
+
+	fmt.Println(m1, m2, m3)
+}
+</code></pre>
+<h2 id="遍历">遍历</h2>
+<pre><code>func main() {
+	m1 := map[string]string{
+		&quot;name&quot;: &quot;wh&quot;,
+		&quot;city&quot;: &quot;sgp&quot;,
+	} //map[city:sgp name:wh]
+
+	for k, v := range m1 {
+		fmt.Println(k, v)
+
+	}
+	
+}
+</code></pre>
+<p>得到结果</p>
+<pre><code>name wh
+city sgp
+</code></pre>
+<p>⚠️ key在map里面无序，也就是输出还可以下面这样，如果需要排序就需要手动对key排序（slice），然后也可以这样（slice的len）来获取元素个数。</p>
+<pre><code>city sgp
+name wh
+</code></pre>
+<p>如果不需要的参数 <code>k,v</code> 可以<code>_</code>替代</p>
+<h2 id="获取map的值">获取map的值</h2>
+<pre><code>func main() {
+	m1 := map[string]string{
+		&quot;name&quot;: &quot;wh&quot;,
+		&quot;city&quot;: &quot;sgp&quot;,
+	} //map[city:sgp name:wh]
+	fmt.Println(m1[&quot;name&quot;])  //wh
+}
+</code></pre>
+<p>就 <code>m1[&quot;name&quot;]</code> 这样<br>
+如果打错了 <code>m1[&quot;nama&quot;]</code> 会输出 <code> </code> 空的</p>
+<h2 id="判断值是否存在">判断值是否存在</h2>
+<pre><code>func main() {
+	m1 := map[string]string{
+		&quot;name&quot;: &quot;wh&quot;,
+		&quot;city&quot;: &quot;sgp&quot;,
+	} //map[city:sgp name:wh]
+	
+	_, nameok := m1[&quot;name&quot;]
+	fmt.Println(nameok) //true
+
+	_, namaok := m1[&quot;nama&quot;]
+	fmt.Println(namaok)  //false
+
+}
+</code></pre>
+<p>类似 <code>_, nameok := m1[&quot;name&quot;]</code> 其中<code>_</code>的位置表示取得的值（这里_表示我不要），<code>nameok</code>表示<code>name</code>段是否存在</p>
+<p><strong>实际可以这么用嘛</strong></p>
+<pre><code>m1 := map[string]string{
+		&quot;name&quot;: &quot;wh&quot;,
+		&quot;city&quot;: &quot;sgp&quot;,
+	} //map[city:sgp name:wh]
+
+	if name,ok := m1[&quot;name&quot;];ok{
+		fmt.Println(name)
+	}else {
+		fmt.Println(&quot;空值&quot;)
+	}
+</code></pre>
+<p>有值就打印，没有就打印“空值”</p>
+<h2 id="删除值">删除值</h2>
+<pre><code>func main() {
+	m1 := map[string]string{
+		&quot;name&quot;: &quot;wh&quot;,
+		&quot;city&quot;: &quot;sgp&quot;,
+	} //map[city:sgp name:wh]
+
+	fmt.Println(m1) //map[city:sgp name:wh]
+	delete(m1, &quot;name&quot;)
+	fmt.Println(m1) //map[city:sgp]
+}
+</code></pre>
+<p>就是 <code>delete(m1, &quot;name&quot;)</code><br>
+用 <code>delete</code> 第一个参数是 map名 第二个是 字段名</p>
+<h2 id="map的key">map的key</h2>
+<p>map使用哈希表，可以比较相等<br>
+除了<code>slice</code>,<code>map</code>,<code>function</code>的内建类型都可以作为key(通常也不会这样乱搞)<br>
+struct类型<strong>不包含上述字段</strong>也可以作为key</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[slice切片-golang复习]]></title>
+        <id>https://whitiy666.github.io/post/slice-qie-pian-golang-fu-xi-1/</id>
+        <link href="https://whitiy666.github.io/post/slice-qie-pian-golang-fu-xi-1/">
+        </link>
+        <updated>2022-11-29T11:58:27.000Z</updated>
+        <summary type="html"><![CDATA[<p>复习一下切片，slice</p>
+<h2 id="例子">例子</h2>
+<h4 id="demo1">demo1</h4>
+<pre><code class="language-golang">func main() {
+	arr := [...]int{0, 1, 2, 3, 4, 5, 6, 7} //数组
+	s := arr[2:6]  //从数组取2—6
+	fmt.Println(s) //输出 [2 3 4 5]
+    fmt.Println(arr[:6]) // [0 1 2 3 4 5] 省略头直接从0开始
+	fmt.Println(arr[2:])   // [2 3 4 5 6 7] 省略尾巴直接到末尾
+	fmt.Println(arr[:])  // [0 1 2 3 4 5 6 7]  头尾都省了全部都有
+}
+</code></pre>
+]]></summary>
+        <content type="html"><![CDATA[<p>复习一下切片，slice</p>
+<h2 id="例子">例子</h2>
+<h4 id="demo1">demo1</h4>
+<pre><code class="language-golang">func main() {
+	arr := [...]int{0, 1, 2, 3, 4, 5, 6, 7} //数组
+	s := arr[2:6]  //从数组取2—6
+	fmt.Println(s) //输出 [2 3 4 5]
+    fmt.Println(arr[:6]) // [0 1 2 3 4 5] 省略头直接从0开始
+	fmt.Println(arr[2:])   // [2 3 4 5 6 7] 省略尾巴直接到末尾
+	fmt.Println(arr[:])  // [0 1 2 3 4 5 6 7]  头尾都省了全部都有
+}
+</code></pre>
+<!-- more -->
+<h3 id="demo2">demo2</h3>
+<p>slice不是一个值类型，是数据结构视图<br>
+<code>arr[:6]</code> 是对于 <code>arr</code>的一个视图<br>
+<code>[]int</code> 表示一个slice 没有...或者长度，<strong>与数组区别</strong></p>
+<pre><code class="language-golang">func updateSlice(s []int) {
+	s[0] = 100
+}
+
+func main() {
+	arr := [...]int{0, 1, 2, 3, 4, 5, 6, 7}
+	s1 := arr[2:] //[2 3 4 5 6 7]
+
+	fmt.Println(s1) //	修改前  [2 3 4 5 6 7]
+	updateSlice(s1) //执行修改
+	fmt.Println(s1) //[100 3 4 5 6 7]  //切片0的位置改为了100
+	fmt.Println(arr) //[0 1 100 3 4 5 6 7]  原来数组的相应位置2 也被改成了100
+}
+</code></pre>
+<p>因为s1作为arr的一个切片，算是一个视图，所以s1改动时候影响到arr数组的相应位置也发生改动<br>
+貌似用来修改数组是个好方案，省得用指针改<br>
+总结：slice本身没有数据，slice是对底层array的一个视图</p>
+<h3 id="demo3">demo3</h3>
+<p>reslice 在slice上面建立slice</p>
+<pre><code class="language-golang">func main() {
+   arr := [...]int{0, 1, 2, 3, 4, 5, 6, 7}
+   s2 := arr[:] //取得arr全部
+   fmt.Println(s2) //[0 1 2 3 4 5 6 7]
+
+   s2 = s2[:5] //在s2上面取开始到5
+   fmt.Println(s2) //[0 1 2 3 4]
+
+   s2 = s2[2:] //在去过开始到5基础上的s2 上面再取2到结束
+   fmt.Println(s2) //[2 3 4]
+
+}
+</code></pre>
+<p>可以在一个底层array上面建立多个slice<br>
+可以在slice基础上再建立slice，但是底层还是同一个array</p>
+<h3 id="demo3-2">demo3</h3>
+<p>extending slice 拓展slice</p>
+<pre><code class="language-golang">func main() {
+	arr := [...]int{0, 1, 2, 3, 4, 5, 6, 7}
+	s1 := arr[2:6] 
+	fmt.Println(s1) //[2 3 4 5]
+
+	s2 := s1[3:5]  //在s1基础上取 3,4 但是实际上最后就只有第3位指向的5，而没有4指向的（直接打印s1[4]都会报错
+	fmt.Println(s2) //[5 6]  //结果取到了5 6，⚠️但是6压根不在s1里面
+
+}
+</code></pre>
+<p>s2在s1上面取，然后取到了并不在s1中的数据，超出的数据实际上是底层arr的数据——切片的推展<br>
+slice下面有 <code>ptr</code> <code>len</code> <code>cap</code>只要不超过 <code>cap就可以拓展 cap是底层的array slice可以向后扩展，不可以向前扩展 </code>s[i]<code> 不可以超过</code>len(s)<code>,向后扩展不可以超过底层数组 </code>cap(s)`</p>
+<h3 id="demo4">demo4</h3>
+<p>len和cap</p>
+<pre><code class="language-golang">func main() {
+	arr := [...]int{0, 1, 2, 3, 4, 5, 6, 7}
+	s1 := arr[2:6]
+	fmt.Printf(&quot;%v,%d,%d&quot;, s1, len(s1), cap(s1)) //[2 3 4 5],4,6 len就是4，cap就是6（还可以往后拓展到 [6 7]
+}
+</code></pre>
+<p>len就是当前视图slice切片容量，cap就是向后可以拓展到底层array数组的容量</p>
+<h3 id="demo5">demo5</h3>
+<p>向slice append操作</p>
+<pre><code class="language-golang">func main() {
+	arr := [...]int{0, 1, 2, 3, 4, 5, 6, 7}
+	s2 := arr[5:7]                       //[5 6]
+	s3 := append(s2, 10)                 //[5 6 10]
+	s4 := append(s3, 11)                 //[5 6 10 11]
+	s5 := append(s4, 12)                 // [5 6 10 11 12]
+	fmt.Println(&quot;s3,s4,s5=&quot;, s3, s4, s5) //s3,s4,s5= [5 6 10] [5 6 10 11] [5 6 10 11 12]
+	fmt.Println(&quot;arr=&quot;, arr) //arr= [0 1 2 3 4 5 6 10] //即使上面加到了12，但是最多对原来的底层arr影响也在10，没有超过容量
+}
+</code></pre>
+<p>即使上面slice数据加到了12，但是最多对原来的底层arr影响也在10，没有超过arr容量。而11，12这些实际上进入到了一个新开的array里面（容量比原来的要大）——&gt; s4,s5的slice已经不再是arr为底层array，由系统分配了一个新的array作为底层<br>
+<strong>添加元素时超过cap，系统会重新分配更大的底层数组，并且复制原来的值</strong><br>
+原来的arr数组如果有用会被留下，没有用会被垃圾回收机制回收掉<br>
+<strong>由于值传递的关系，必须接收append的返回值</strong><br>
+也就是类似 <code>s = append(s,val)</code></p>
+<h3 id="demo6">demo6</h3>
+<h4 id="demo6-1">demo6-1</h4>
+<p>创建slice 空的nil的 slice</p>
+<pre><code class="language-golang">func printSlice(s []int) {
+	fmt.Printf(&quot;len=%d,cap=%d\n&quot;, len(s), cap(s))
+}
+func main() {
+	var s []int
+
+	for i := 0; i &lt; 5; i++ {
+		printSlice(s)
+		s = append(s, 2*i+1)
+	}
+	fmt.Println(s)
+}
+</code></pre>
+<p>输出</p>
+<pre><code>len=0,cap=0
+len=1,cap=1
+len=2,cap=2
+len=3,cap=4
+len=4,cap=4
+[1 3 5 7 9]
+</code></pre>
+<h4 id="demo6-2">demo6-2</h4>
+<p><code>:= []int</code>创建</p>
+<pre><code class="language-golang">func main() {
+	s1 := []int{2, 4, 6, 8}
+	printSlice_c(s1) //len=4,cap=4
+}
+</code></pre>
+<h4 id="demo6-3">demo6-3</h4>
+<p><code>make</code> 知道slice容量，但是不知道里面的值</p>
+<pre><code class="language-golang">func main() {
+	s1 := make([]int, 16)
+	s2 := make([]int, 10, 32)
+	printSlice_d(s1) //len=16,cap=16
+	printSlice_d(s2) //len=10,cap=32
+}
+</code></pre>
+<h3 id="demo7">demo7</h3>
+<p>复制copy slice</p>
+<pre><code class="language-golang">func main() {
+	s1 := []int{1, 2, 3, 4} //[1 2 3 4]
+	s2 := make([]int, 8)    //[0 0 0 0 0 0 0 0]
+	copy(s2, s1) //把s1的值复制到s2
+	fmt.Println(s2) //[1 2 3 4 0 0 0 0]
+
+}
+</code></pre>
+<p>copy(复制到的位置，用于复制的数据)</p>
+<p>###demo8</p>
+<h4 id="删除中间slice的值">删除中间slice的值</h4>
+<pre><code class="language-golang">func main() {
+	s1 := []int{1, 2, 3, 4, 5, 0, 0, 0}
+	fmt.Println(s1) //[1 2 3 4 5 0 0 0]
+
+	s1 = append(s1[:3], s1[4:]...) //删除了4
+	fmt.Println(s1) //[1 2 3 5 0 0 0]
+}
+</code></pre>
+<p>由于没有给删除值的函数，所以用<code>append</code>来处理<br>
+<code>s1[4:]...</code>中的<code>...</code>表示把4以后的值全部往前面挪</p>
+<h4 id="删除首尾slice的值">删除首尾slice的值</h4>
+<pre><code class="language-golang">func main() {
+   s1 := []int{1, 2, 3, 4, 5, 0, 0, 0}
+   fmt.Println(s1) //[1 2 3 4 5 0 0 0]
+
+   //删除头
+   front := s1[0] //1
+   s1 = s1[1:]
+   
+   //删除尾
+   tail := s1[len(s1)-1] //0
+   s1 = s1[:len(s1)-1]
+
+   fmt.Println(front, tail) //1 0
+   fmt.Println(s1)     //[2 3 4 5 0 0]
+}
+</code></pre>
+<p>删除头就把 <code>[1:]</code> 的值赋给原来的slice<br>
+删除尾就把 <code> [:len(s)-1]</code> 的值赋给原来的slice<br>
+删除会改变 <code>len</code>，不会改变 <code>cap</code></p>
+<h3 id="完结撒花">完结撒花🎉</h3>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[golang-指针复习小记]]></title>
+        <id>https://whitiy666.github.io/post/golang-zhi-zhen-fu-xi-xiao-ji/</id>
+        <link href="https://whitiy666.github.io/post/golang-zhi-zhen-fu-xi-xiao-ji/">
+        </link>
+        <updated>2022-11-28T13:19:02.000Z</updated>
+        <summary type="html"><![CDATA[<h2 id="简记">简记</h2>
+<p>go的指针是不能运算的<br>
+<code>*int</code> 在类型前面加<code>*</code>表示指针<br>
+<code>&amp;a</code> 在a变量前加<code>&amp;</code>表示取a的地址<br>
+java/python都是引用传递，<strong>go是值传递</strong><br>
+意味着调用参数的时候都需要复制一份值，保证性能使用指针</p>
+]]></summary>
+        <content type="html"><![CDATA[<h2 id="简记">简记</h2>
+<p>go的指针是不能运算的<br>
+<code>*int</code> 在类型前面加<code>*</code>表示指针<br>
+<code>&amp;a</code> 在a变量前加<code>&amp;</code>表示取a的地址<br>
+java/python都是引用传递，<strong>go是值传递</strong><br>
+意味着调用参数的时候都需要复制一份值，保证性能使用指针</p>
+<!-- more -->
+<pre><code>func main() {
+	var a int = 2 
+	var pa *int = &amp;a //int指针类型pa = 取a的地址
+	fmt.Println(pa) //输出 0x140000a2008
+	*pa = 3 //让pa指向的地址，实际就是a = 3
+	fmt.Println(a) //输出3
+}
+</code></pre>
+<h2 id="值传递与引用传递">值传递与引用传递</h2>
+<h3 id="值传递">值传递</h3>
+<p>主要是拷贝，但是不会改变原来的值</p>
+<pre><code>//c代码
+void pass_by_val(int a){
+    a++; //会复制参数的值到a，但是实际外面引用的a没有变
+}
+int main(){
+    int a=3;
+    pass_by_val(a);
+    printf(a);  //3，没有对a进行+1
+}
+</code></pre>
+<p>会复制参数的值到a，但是实际外面引用的a没有变。所以调用了 <code>pass_by_val(a);</code> 过后还是输出3</p>
+<h3 id="引用传递">引用传递</h3>
+<pre><code>//c代码
+void pass_by_ref(int&amp; a){
+    a++; 直接在地址中对应a的位置修改
+}
+int main(){
+    int a=3;
+    pass_by_ref(a);
+    printf(a);  //4，对a进行+1
+}
+</code></pre>
+<p>直接对参数a的地址所在位置，实际上在对a进行操作，所以调用了 <code>pass_by_ref(a);</code> 过后输出4（在a=3上面+1）</p>
+<h2 id="例子">例子</h2>
+<h3 id="交换值指针操作">交换值(指针操作)</h3>
+<pre><code>func swap(a, b *int) {
+	*b, *a = *a, *b //直接对ab对指针对应位置交换
+}
+func main() {
+	a, b := 3, 4
+	fmt.Println(a, b)  //3，4
+	swap(&amp;a, &amp;b)
+	fmt.Println(a, b)  //4，3
+}
+</code></pre>
+<p>⚠️ 这里对ab指针进行操作，实际上能够操作到ab。如果只是 a,b=b,a就交换不了，因为这种值传递的形式操作不到给的ab（只是把ab复制进去操作了，外面照样操作不了）</p>
+<h3 id="交换值返回值替换">交换值(返回值替换)</h3>
+<pre><code>func swap(a, b int) (int, int) {
+	return b, a //丢回返回值，用以替换原来的ab
+}
+func main() {
+	a, b := 3, 4
+	fmt.Println(a, b) //3，4
+	a, b = swap(a, b)
+	fmt.Println(a, b)   //4，3
+}
+</code></pre>
+<p>⚠️这里返回了值，将原来的ab复制进去，此时没有改变原来的ab。但是在调用的时候由于出来了交换后的返回值所以在原来的ab拿来接住返回值替换即可</p>
+]]></content>
+    </entry>
+    <entry>
+        <title type="html"><![CDATA[Macos下代理软件]]></title>
+        <id>https://whitiy666.github.io/post/macos-xia-dai-li-ruan-jian/</id>
+        <link href="https://whitiy666.github.io/post/macos-xia-dai-li-ruan-jian/">
+        </link>
+        <updated>2022-11-24T05:13:28.000Z</updated>
+        <summary type="html"><![CDATA[<blockquote>
+<p>因为最开始用的qv2ray越来越不好用，且很难代理没有 <strong>代理设置</strong> 的应用流量。所以换了</p>
+</blockquote>
+]]></summary>
+        <content type="html"><![CDATA[<blockquote>
+<p>因为最开始用的qv2ray越来越不好用，且很难代理没有 <strong>代理设置</strong> 的应用流量。所以换了</p>
+</blockquote>
+<!-- more -->
+<h3 id="clashx-pro">ClashX Pro</h3>
+<p>很好用的软件，是原生开发的性能也很棒。<br>
+在 <strong>增强模式</strong> 下可以做到tun代理，也就可以接管大部分流量了（自然包括 term还有其他应用的流量）。<br>
+不过clashx的配置稍微麻烦一点，不过也可以设置更复杂的分流规则。<br>
+如果像我一样的懒人的话，可以直接找个配置生成器（感觉在翻墙上面折腾实属不必要）。<br>
+愿意折腾的也可以看文档自己写。</p>
+<h3 id="踩的坑">踩的坑</h3>
+<p>安装了要重启电脑，不然打不开。（如果遇到的话</p>
+<p><s>再见了 Qv2ray</s></p>
+]]></content>
+    </entry>
+</feed>
